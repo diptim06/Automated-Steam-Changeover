@@ -87,10 +87,10 @@ This approach provides simplicity, fine-grained control, and minimal abstraction
    ```
 
 4. Configure environment variables:
-   Create a `.env` file and add:
+   Copy `.env.example` to a new file named `.env` and fill in your values:
 
-   ```
-   MONGO_URI=your_mongodb_connection_string
+   ```bash
+   cp .env.example .env
    ```
 
 5. Start the application:
