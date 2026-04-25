@@ -2,7 +2,7 @@ require("dotenv").config();
 const { MongoClient } = require("mongodb");
 
 const MONGO_URI = process.env.MONGO_URI || "mongodb://localhost:27017";
-const DB_NAME = "flowdb";
+const DB_NAME = process.env.DB_NAME || "flowDB";
 
 let client;
 let db;
