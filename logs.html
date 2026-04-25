@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Logs</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <link rel="stylesheet" href="/logs.css" />
+  </head>
+  <body>
+    <div class="page-layout">
+      <aside class="sidebar">
+        <h2>Menu</h2>
+        <nav class="sidebar-nav">
+          <a class="nav-link" href="/dashboard">Dashboard</a>
+          <a class="nav-link" href="/simulation">Simulation</a>
+          <a class="nav-link active" href="/logs">Logs</a>
+          <a class="nav-link" href="/settings">Settings</a>
+        </nav>
+        <button id="logoutBtn" class="danger-btn full-width-btn">Logout</button>
+      </aside>
+
+      <main class="page-main">
+        <header class="simple-card page-header">
+          <div>
+            <h1>Logs</h1>
+            <p id="operatorLabel" class="page-text"></p>
+          </div>
+          <button id="clearLogsBtn" class="danger-btn">Clear Logs</button>
+        </header>
+
+        <section class="simple-card">
+          <div id="logsList" class="logs-list"></div>
+        </section>
+      </main>
+    </div>
+
+    <script src="/site.js"></script>
+    <script src="/logs.js"></script>
+  </body>
+</html>

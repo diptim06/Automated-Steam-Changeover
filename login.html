@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Operator Login</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+      :root {
+        --bg-color: #000000;
+        --primary: #00ccff;
+        --primary-hover: #33d6ff;
+        --text-main: #ffffff;
+        --text-muted: #b3c5d1;
+        --card-bg: rgba(0, 0, 0, 0.75);
+        --card-border: rgba(0, 204, 255, 0.3);
+        --input-bg: rgba(255, 255, 255, 0.05);
+        --input-border: rgba(0, 204, 255, 0.15);
+        --error: #ff3366;
+      }
+
+      [data-theme="light"] {
+        --bg-color: #f0f4f8;
+        --primary: #00ccff;
+        --primary-hover: #33d6ff;
+        --text-main: #0f172a;
+        --text-muted: #475569;
+        --card-bg: rgba(255, 255, 255, 0.85);
+        --card-border: rgba(0, 204, 255, 0.4);
+        --input-bg: rgba(255, 255, 255, 0.9);
+        --input-border: rgba(0, 0, 0, 0.2);
+        --error: #dc2626;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: 'Inter', sans-serif;
+        background-color: var(--bg-color);
+        color: var(--text-main);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+
+      /* Background */
+      .bg-image {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: url('https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80') center/cover no-repeat;
+        z-index: -2;
+        filter: brightness(0.4) grayscale(0.3);
+        transition: filter 0.3s ease;
+      }
+
+      [data-theme="light"] .bg-image {
+        filter: brightness(1) grayscale(0);
+      }
+
+      .bg-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.55);
+        backdrop-filter: blur(4px);
+        -webkit-backdrop-filter: blur(4px);
+        z-index: -1;
+        transition: background 0.3s ease;
+      }
+
+      [data-theme="light"] .bg-overlay {
+        background: rgba(255, 255, 255, 0.45);
+      }
+
+      /* Back to Home Link */
+      .top-nav {
+        position: absolute;
+        top: 2rem;
+        left: 2rem;
+        right: 2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        z-index: 10;
+      }
+
+      .back-link {
+        color: var(--text-muted);
+        text-decoration: none;
+        font-size: 0.9rem;
+        font-weight: 500;
+        transition: color 0.2s ease;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .back-link:hover {
+        color: var(--text-main);
+      }
+
+      .theme-toggle {
+        background: transparent;
+        border: none;
+        color: var(--text-main);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: color 0.2s ease;
+      }
+
+      .theme-toggle:hover {
+        color: var(--primary);
+      }
+
+      /* Auth Card */
+      .auth-container {
+        width: 100%;
+        max-width: 420px;
+        padding: 2rem;
+        z-index: 1;
+      }
+
+      .glass-card {
+        background: var(--card-bg);
+        border: 1px solid var(--card-border);
+        border-radius: 12px;
+        padding: 2.5rem 2rem;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        text-align: center;
+      }
+
+      .glass-card h1 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+      }
+
+      .page-text {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        line-height: 1.5;
+        margin-bottom: 2rem;
+      }
+
+      /* Form Elements */
+      .simple-form {
+        display: flex;
+        flex-direction: column;
+        gap: 1.25rem;
+        text-align: left;
+      }
+
+      .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+
+      label {
+        font-size: 0.85rem;
+        font-weight: 500;
+        color: var(--text-muted);
+      }
+
+      input {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        background-color: var(--input-bg);
+        border: 1px solid var(--input-border);
+        border-radius: 6px;
+        color: var(--text-main);
+        font-family: 'Inter', sans-serif;
+        font-size: 1rem;
+        transition: border-color 0.2s ease, background-color 0.2s ease;
+        outline: none;
+      }
+
+      input:focus {
+        border-color: var(--primary);
+        background-color: rgba(255, 255, 255, 0.1);
+      }
+
+      .message-box {
+        font-size: 0.85rem;
+        color: var(--error);
+        text-align: center;
+        min-height: 1.2rem;
+      }
+
+      /* Buttons */
+      .btn-container {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        margin-top: 0.5rem;
+      }
+
+      .primary-btn, .secondary-btn {
+        width: 100%;
+        padding: 0.75rem;
+        border-radius: 6px;
+        font-family: 'Inter', sans-serif;
+        font-weight: 600;
+        font-size: 0.95rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        border: none;
+      }
+
+      .primary-btn {
+        background-color: var(--primary);
+        color: #000000;
+        box-shadow: 0 0 10px rgba(0, 204, 255, 0.4);
+      }
+
+      .primary-btn:hover {
+        background-color: var(--primary-hover);
+        transform: translateY(-1px);
+        box-shadow: 0 0 20px rgba(0, 204, 255, 0.6);
+      }
+
+      .secondary-btn {
+        background-color: transparent;
+        color: var(--text-main);
+        border: 1px solid var(--card-border);
+      }
+
+      .secondary-btn:hover {
+        background-color: rgba(255, 255, 255, 0.05);
+      }
+
+      .forgot-link {
+        display: inline-block;
+        margin-top: 1rem;
+        font-size: 0.85rem;
+        color: var(--primary);
+        text-decoration: none;
+        font-weight: 500;
+        text-align: center;
+        width: 100%;
+      }
+
+      .forgot-link:hover {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Background layers -->
+    <div class="bg-image"></div>
+    <div class="bg-overlay"></div>
+
+    <div class="top-nav">
+      <a href="/" class="back-link">
+        <span>← Back to Home</span>
+      </a>
+      <button id="themeToggleBtn" class="theme-toggle" aria-label="Toggle theme">
+        <svg id="moonIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+        <svg id="sunIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+      </button>
+    </div>
+
+    <main class="auth-container">
+      <section class="glass-card">
+        <h1>Operator Login</h1>
+        <p class="page-text">Enter your Operator ID and password. New ID? Create an account below.</p>
+
+        <form id="loginForm" class="simple-form">
+          <div class="form-group">
+            <label for="operatorId">Operator ID</label>
+            <input id="operatorId" name="operatorId" type="text" inputmode="numeric" required />
+          </div>
+
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input id="password" name="password" type="password" required />
+          </div>
+
+          <p id="messageBox" class="message-box"></p>
+
+          <div class="btn-container">
+            <button type="submit" id="loginBtn" class="primary-btn">Login to System</button>
+            <button type="button" id="registerBtn" class="secondary-btn">Create Account</button>
+          </div>
+          
+          <a href="/forgot-password" class="forgot-link">Forgot Password?</a>
+        </form>
+      </section>
+    </main>
+
+    <script src="/login.js"></script>
+    <script>
+      const themeToggleBtn = document.getElementById('themeToggleBtn');
+      const sunIcon = document.getElementById('sunIcon');
+      const moonIcon = document.getElementById('moonIcon');
+
+      function setTheme(isDark) {
+        if (isDark) {
+          document.documentElement.removeAttribute('data-theme');
+          sunIcon.style.display = 'block';
+          moonIcon.style.display = 'none';
+        } else {
+          document.documentElement.setAttribute('data-theme', 'light');
+          sunIcon.style.display = 'none';
+          moonIcon.style.display = 'block';
+        }
+      }
+
+      const savedTheme = localStorage.getItem('theme');
+      const isDark = savedTheme ? savedTheme === 'dark' : true;
+      setTheme(isDark);
+
+      themeToggleBtn.addEventListener('click', () => {
+        const isCurrentlyDark = !document.documentElement.hasAttribute('data-theme');
+        const newIsDark = !isCurrentlyDark;
+        setTheme(newIsDark);
+        localStorage.setItem('theme', newIsDark ? 'dark' : 'light');
+      });
+    </script>
+  </body>
+</html>

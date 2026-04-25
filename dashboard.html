@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <link rel="stylesheet" href="/dashboard.css" />
+  </head>
+  <body>
+    <div class="page-layout">
+      <aside class="sidebar">
+        <h2>Menu</h2>
+        <nav class="sidebar-nav">
+          <a class="nav-link active" href="/dashboard">Dashboard</a>
+          <a class="nav-link" href="/simulation">Simulation</a>
+          <a class="nav-link" href="/logs">Logs</a>
+          <a class="nav-link" href="/settings">Settings</a>
+        </nav>
+        <button id="logoutBtn" class="danger-btn full-width-btn">Logout</button>
+      </aside>
+
+      <main class="page-main">
+        <header class="simple-card page-header">
+          <div>
+            <h1>Dashboard</h1>
+            <p id="operatorLabel" class="page-text"></p>
+          </div>
+        </header>
+
+        <section class="dashboard-grid">
+          <article class="simple-card">
+            <h2>Active Stream</h2>
+            <p id="activeStreamTitle" class="active-title">Stream A</p>
+            <div class="two-column-grid">
+              <div class="info-box">
+                <span class="info-label">Flow Rate</span>
+                <strong id="currentFlow">--</strong>
+              </div>
+              <div class="info-box">
+                <span class="info-label">Pressure</span>
+                <strong id="currentPressure">--</strong>
+              </div>
+            </div>
+          </article>
+
+          <article class="simple-card">
+            <div class="section-row">
+              <h2>Flow Visualizer</h2>
+              <span id="flowPercentLabel">0%</span>
+            </div>
+            <div class="flow-track">
+              <div id="pipeFill" class="flow-fill"></div>
+            </div>
+          </article>
+
+          <br>
+          <article class="simple-card full-width">
+            <div class="section-row">
+              <h2>Streams</h2>
+              <span>Active stream changes only after fault.</span>
+            </div>
+            <div id="streamGrid" class="stream-grid"></div>
+          </article>
+
+          <br>
+          <article class="simple-card full-width">
+            <h2>Controls</h2>
+            <div class="button-row">
+              <button id="manualSwitchBtn" class="primary-btn">Manual Switch</button>
+              <button id="simulateFaultBtn" class="danger-btn">Insert Fault on Active Stream</button>
+              <button id="increasePressureBtn" class="secondary-btn">Increase Pressure</button>
+            </div>
+          </article>
+        </section>
+      </main>
+    </div>
+
+    <script src="/site.js"></script>
+    <script src="/dashboard.js"></script>
+  </body>
+</html>

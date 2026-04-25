@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Simulation</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <link rel="stylesheet" href="/simulation.css" />
+  </head>
+  <body>
+    <div class="page-layout">
+      <aside class="sidebar">
+        <h2>Menu</h2>
+        <nav class="sidebar-nav">
+          <a class="nav-link" href="/dashboard">Dashboard</a>
+          <a class="nav-link active" href="/simulation">Simulation</a>
+          <a class="nav-link" href="/logs">Logs</a>
+          <a class="nav-link" href="/settings">Settings</a>
+        </nav>
+        <button id="logoutBtn" class="danger-btn full-width-btn">Logout</button>
+      </aside>
+
+      <main class="page-main">
+        <header class="simple-card page-header">
+          <div>
+            <h1>Simulation</h1>
+            <p id="operatorLabel" class="page-text"></p>
+          </div>
+        </header>
+
+
+        <section class="simple-card">
+          <h2>Flow Controls</h2>
+          <p class="page-text">
+            Select a stream and adjust the flow threshold, pressure threshold, and flow value for a simple classroom simulation.
+          </p>
+
+          <div class="control-stack">
+            <div>
+              <label class="control-label" for="streamSelect">Stream</label>
+              <select id="streamSelect"></select>
+            </div>
+
+            <div class="slider-group">
+              <div class="section-row">
+                <span>Flow Threshold</span>
+                <strong id="thresholdValue">0 L/min</strong>
+              </div>
+              <input id="thresholdSlider" type="range" min="10" max="90" step="1" />
+            </div>
+
+            <div class="slider-group">
+              <div class="section-row">
+                <span>Pressure Threshold</span>
+                <strong id="pressureThresholdValue">0 bar</strong>
+              </div>
+              <input id="pressureThresholdSlider" type="range" min="2.0" max="10.0" step="0.1" />
+            </div>
+
+            <div class="slider-group">
+              <div class="section-row">
+                <span>Flow</span>
+                <strong id="flowValue">0 L/min</strong>
+              </div>
+              <input id="flowSlider" type="range" min="0" max="100" step="1" />
+            </div>
+
+            <div class="two-column-grid">
+              <div class="info-box">
+                <span class="info-label">Selected Stream</span>
+                <strong id="selectedStreamTitle">Stream A</strong>
+              </div>
+              <div class="info-box">
+                <span class="info-label">Mode</span>
+                <select id="streamModeSelect" class="mode-select-inline">
+                  <option value="auto">Automatic</option>
+                  <option value="manual">Manual Flow</option>
+                </select>
+              </div>
+              <div class="info-box">
+                <span class="info-label">Current Flow</span>
+                <strong id="selectedFlowStat">0 L/min</strong>
+              </div>
+              <div class="info-box">
+                <span class="info-label">Flow Threshold</span>
+                <strong id="selectedThresholdStat">0 L/min</strong>
+              </div>
+              <div class="info-box">
+                <span class="info-label">Press. Threshold</span>
+                <strong id="selectedPressureThresholdStat">0 bar</strong>
+              </div>
+            </div>
+
+            <div class="button-row">
+              <button id="applySimulationBtn" class="primary-btn">Apply Values</button>
+              <button id="autoFlowBtn" class="secondary-btn">Use Automatic Flow</button>
+              <button id="activateSimulationBtn" class="secondary-btn">Activate Stream</button>
+            </div>
+
+            <p id="simulationMessage" class="page-text"></p>
+            <p id="simulationHint" class="page-text"></p>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="/site.js"></script>
+    <script src="/simulation.js"></script>
+  </body>
+</html>

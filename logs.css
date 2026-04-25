@@ -1,0 +1,36 @@
+/* logs.css — logs page only */
+
+.logs-list {
+  display: grid;
+  gap: 12px;
+}
+
+.log-item {
+  padding: 16px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: var(--card-bg);
+  color: var(--text-primary);
+  font-size: 14px;
+  font-family: 'Inter', monospace;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.log-item:hover {
+  transform: translateX(4px);
+  border-color: #cbd5e1;
+  box-shadow: var(--shadow-md);
+}
+
+/* Style normal vs fault logs if possible based on content in JS, but base style is here */
+.log-item.fault-log {
+  border-left: 4px solid var(--danger-color);
+}
+
+.log-item.normal-log {
+  border-left: 4px solid var(--success-color);
+}
