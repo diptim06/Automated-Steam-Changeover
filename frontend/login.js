@@ -1,4 +1,5 @@
-// Get all elements by ID
+// Get all elements by ID when page loads
+// get the login/register form elements
 function getElements() {
   var elements = {};
   elements.loginForm = document.getElementById("loginForm");
@@ -10,10 +11,11 @@ function getElements() {
   return elements;
 }
 
-var els = getElements();
+var els = getElements(); //storing ids
 
+// handle login or register button clicks
 function submitAuth(url) {
-  var operatorId = els.operatorIdInput.value.trim();
+  var operatorId = els.operatorIdInput.value.trim(); //to extract values
   var password = els.passwordInput.value;
 
   if (!/^\d+$/.test(operatorId)) {
@@ -34,29 +36,30 @@ function submitAuth(url) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload)
   })
-  .then(function(response) {
-    return response.json().catch(function() {
-      return {};
-    }).then(function(data) {
-      if (!response.ok) {
-        els.messageBox.textContent = data.error || "Request failed.";
-        return;
-      }
-      window.location.href = "/dashboard";
+    .then(function (response) {
+      return response.json().catch(function () {
+        return {};
+      }).then(function (data) {
+        if (!response.ok) {
+          els.messageBox.textContent = data.error || "Request failed.";
+          return;
+        }
+        window.location.href = "/dashboard";
+      });
+    })
+    .catch(function () {
+      els.messageBox.textContent = "Unable to reach server.";
     });
-  })
-  .catch(function() {
-    els.messageBox.textContent = "Unable to reach server.";
-  });
 }
 
+// attach the form submit and register button events
 function setupEventListeners() {
-  els.loginForm.onsubmit = function(event) {
+  els.loginForm.onsubmit = function (event) {
     event.preventDefault();
     submitAuth("/api/login");
   };
 
-  els.registerBtn.onclick = function() {
+  els.registerBtn.onclick = function () {
     submitAuth("/api/register");
   };
 }

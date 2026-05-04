@@ -1,3 +1,4 @@
+// setup the password reset flow when the page loads
 document.addEventListener("DOMContentLoaded", function() {
   var step1 = document.getElementById("step1");
   var step2 = document.getElementById("step2");
@@ -18,6 +19,7 @@ document.addEventListener("DOMContentLoaded", function() {
   // State
   var requestedOperatorId = "";
 
+  // ask for the OTP code via api
   requestOtpBtn.onclick = function() {
     var operatorId = operatorIdInput.value.trim();
     if (!operatorId || !/^\d+$/.test(operatorId)) {
@@ -59,6 +61,7 @@ document.addEventListener("DOMContentLoaded", function() {
     });
   };
 
+  // verify the code and set the new password
   resetPasswordBtn.onclick = function() {
     var otp = otpInput.value.trim();
     var newPass = newPasswordInput.value;

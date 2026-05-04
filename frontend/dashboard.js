@@ -1,4 +1,5 @@
 // Get all elements by ID
+// grab all the elements we need from the page
 function getElements() {
   var elements = {};
   elements.activeStreamTitle = document.getElementById("activeStreamTitle");
@@ -15,11 +16,13 @@ function getElements() {
 
 var els = getElements();
 
+// turn the flow number into a percentage for the progress bar
 function flowToPercent(flow) {
   var v = Math.max(20, Math.min(100, Number(flow) || 0));
   return Math.round(((v - 20) / 80) * 100);
 }
 
+// figure out what text to show based on stream health
 function statusText(stream) {
   if (stream.faultReason === "pressure_high") {
     return "Pressure Fault";
@@ -36,6 +39,7 @@ function statusText(stream) {
   return "Standby";
 }
 
+// build and show the cards for each stream (A, B, C, D)
 function renderStreamCards(streams) {
   var html = "";
   var i;
@@ -71,6 +75,7 @@ function renderStreamCards(streams) {
   els.streamGrid.innerHTML = html;
 }
 
+// refresh the main dashboard view with new stats
 function updateDashboard(data) {
   var pct = flowToPercent(data.flow);
   els.activeStreamTitle.textContent = "Stream " + data.activeStream;
@@ -81,6 +86,7 @@ function updateDashboard(data) {
   renderStreamCards(data.streams);
 }
 
+// fetch current flow/pressure data from api
 function fetchState() {
   fetch("/api/flow")
     .then(function(response) {
@@ -95,6 +101,7 @@ function fetchState() {
     });
 }
 
+// small helper for POST requests
 function post(url, body) {
   fetch(url, {
     method: "POST",
@@ -108,6 +115,7 @@ function post(url, body) {
   });
 }
 
+// setup all the button clicks for the dashboard
 function setupEventListeners() {
   els.manualSwitchBtn.onclick = function() {
     post("/api/switch");
@@ -131,6 +139,7 @@ function setupEventListeners() {
   };
 }
 
+// handle clicks on the dynamically generated stream cards
 function handleStreamClick(event) {
   var target = event.target;
   while (target && target !== els.streamGrid) {
@@ -151,6 +160,7 @@ function handleStreamClick(event) {
   }
 }
 
+// startup logic: setup listeners and start the 2s refresh loop
 function init() {
   setupEventListeners();
   els.streamGrid.onclick = handleStreamClick;

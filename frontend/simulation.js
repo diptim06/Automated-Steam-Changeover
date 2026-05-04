@@ -1,4 +1,5 @@
 // Get all elements by ID
+// get all simulation controls
 function getElements() {
   var elements = {};
   elements.streamSelect = document.getElementById("streamSelect");
@@ -25,6 +26,7 @@ var els = getElements();
 var flowState = null;
 var isEditing = false;
 
+// show a status message to the user
 function setMessage(text, cls) {
   if (!cls) {
     cls = "page-text";
@@ -33,6 +35,7 @@ function setMessage(text, cls) {
   els.simulationMessage.textContent = text;
 }
 
+// figure out which stream is currently picked in the dropdown
 function getSelectedStream() {
   if (!flowState) return null;
   var i;
@@ -45,6 +48,7 @@ function getSelectedStream() {
   return null;
 }
 
+// update the text next to the range sliders
 function updateSliderLabels() {
   var threshold = Number(els.thresholdSlider.value);
   var pressureThreshold = Number(els.pressureThresholdSlider.value);
@@ -57,6 +61,7 @@ function updateSliderLabels() {
   els.selectedPressureThresholdStat.textContent = pressureThreshold.toFixed(1) + " bar";
 }
 
+// show helpful tips based on what the user is doing
 function updateHint(stream) {
   if (!stream) {
     els.simulationHint.textContent = "";
@@ -76,6 +81,7 @@ function updateHint(stream) {
   }
 }
 
+// update sliders when the stream selection changes
 function syncControls(stream, preserveInputs) {
   if (!stream) return;
   els.selectedStreamTitle.textContent = "Stream " + stream.name;
@@ -99,6 +105,7 @@ function syncControls(stream, preserveInputs) {
   updateHint(stream);
 }
 
+// get latest system data for simulation
 function loadState(preserveInputs) {
   fetch("/api/flow")
     .then(function(response) {
@@ -130,6 +137,7 @@ function loadState(preserveInputs) {
     });
 }
 
+// post data to the api with a callback
 function post(url, body, callback) {
   fetch(url, {
     method: "POST",
@@ -156,6 +164,7 @@ function post(url, body, callback) {
   });
 }
 
+// listen for slider changes and button clicks
 function setupEventListeners() {
   els.streamModeSelect.onchange = function() {
     isEditing = false;
@@ -262,6 +271,7 @@ function setupEventListeners() {
 }
 
 
+// startup the simulation page refresh loop
 function init() {
   setupEventListeners();
   

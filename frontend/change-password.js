@@ -1,3 +1,4 @@
+// make sure the user is logged in and setup the password change form
 document.addEventListener("DOMContentLoaded", function () {
   var oldPassword = document.getElementById("oldPassword");
   var newPassword = document.getElementById("newPassword");
@@ -5,6 +6,7 @@ document.addEventListener("DOMContentLoaded", function () {
   var passwordMessage = document.getElementById("passwordMessage");
   var changePasswordBtn = document.getElementById("changePasswordBtn");
 
+  // send old and new passwords to the server to swap them
   changePasswordBtn.onclick = function () {
     var oldPass = oldPassword.value;
     var newPass = newPassword.value;

@@ -1,51 +1,11 @@
-require("dotenv").config();
-const { MongoClient } = require("mongodb");
+const { getDb } = require("../core/db");
 
-const MONGO_URI = process.env.MONGO_URI || "mongodb://localhost:27017";
-const DB_NAME = process.env.DB_NAME || "flowDB";
-
-let client;
-let db;
-
-async function initDb() {
-  client = new MongoClient(MONGO_URI);
-  await client.connect();
-  db = client.db(DB_NAME);
-
-  // Unique index on operatorId for the users collection
-  await db.collection("users").createIndex({ operatorId: 1 }, { unique: true });
-
-  console.log(`Connected to MongoDB at ${MONGO_URI} — database: ${DB_NAME}`);
-}
-
-async function insertLog(previousStream, newStream, reason) {
-  const timestamp = new Date().toISOString();
-  await db.collection("logs").insertOne({
-    timestamp,
-    previous_stream: previousStream,
-    new_stream: newStream,
-    reason,
-  });
-}
-
-async function getAllLogs() {
-  const docs = await db
-    .collection("logs")
-    .find({}, { projection: { _id: 0 } })
-    .sort({ _id: -1 })
-    .toArray();
-  return docs;
-}
-
-async function clearAllLogs() {
-  await db.collection("logs").deleteMany({});
-}
-
+// fetch a user using their ID
 async function getUserByOperatorId(operatorId) {
+  const db = getDb();
   const doc = await db.collection("users").findOne({ operatorId });
   if (!doc) return null;
 
-  // Map MongoDB field names back to the shape server.js expects
   return {
     operator_id: doc.operatorId,
     email: doc.email,
@@ -55,7 +15,9 @@ async function getUserByOperatorId(operatorId) {
   };
 }
 
+// lookup user by email address
 async function getUserByEmail(email) {
+  const db = getDb();
   const doc = await db.collection("users").findOne({ email });
   if (!doc) return null;
 
@@ -68,7 +30,9 @@ async function getUserByEmail(email) {
   };
 }
 
+// register a new user in the system
 async function createUser(operatorId, email, passwordHash, passwordSalt) {
+  const db = getDb();
   const createdAt = new Date().toISOString();
   await db.collection("users").insertOne({
     operatorId,
@@ -87,7 +51,9 @@ async function createUser(operatorId, email, passwordHash, passwordSalt) {
   };
 }
 
+// swap out the password for an existing user
 async function updateUserPassword(operatorId, passwordHash, passwordSalt) {
+  const db = getDb();
   await db.collection("users").updateOne(
     { operatorId },
     { $set: { passwordHash, passwordSalt } }
@@ -95,10 +61,6 @@ async function updateUserPassword(operatorId, passwordHash, passwordSalt) {
 }
 
 module.exports = {
-  initDb,
-  insertLog,
-  getAllLogs,
-  clearAllLogs,
   getUserByOperatorId,
   getUserByEmail,
   createUser,

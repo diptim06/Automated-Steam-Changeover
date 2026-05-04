@@ -1,4 +1,5 @@
 // Get all elements by ID
+// get elements for the settings page
 function getElements() {
   var elements = {};
   elements.autoModeToggle = document.getElementById("autoModeToggle");
@@ -9,6 +10,7 @@ function getElements() {
 
 var els = getElements();
 
+// load the current auto-mode and other settings
 function loadSettings() {
   fetch("/api/settings")
     .then(function(response) {
@@ -28,6 +30,7 @@ function loadSettings() {
     });
 }
 
+// handle toggles for dark mode and auto mode
 function setupEventListeners() {
   els.autoModeToggle.onchange = function() {
     fetch("/api/settings/auto-mode", {
@@ -67,6 +70,7 @@ function setupEventListeners() {
 
 }
 
+// init the page with user details
 function init() {
   setupEventListeners();
   

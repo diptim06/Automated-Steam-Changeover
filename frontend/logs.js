@@ -1,4 +1,5 @@
 // Get all elements by ID
+// grab page elements
 function getElements() {
   var elements = {};
   elements.logsList = document.getElementById("logsList");
@@ -18,6 +19,7 @@ var reasonLabels = {
   fault_cleared: "Fault Cleared"
 };
 
+// display the logs on the page
 function renderLogs(logs) {
   if (logs.length === 0) {
     els.logsList.innerHTML = '<div class="log-item">No logs available.</div>';
@@ -36,6 +38,7 @@ function renderLogs(logs) {
   els.logsList.innerHTML = html;
 }
 
+// get the log data from server
 function loadLogs() {
   fetch("/api/logs")
     .then(function(response) {
@@ -50,6 +53,7 @@ function loadLogs() {
     });
 }
 
+// button click handlers
 function setupEventListeners() {
   els.clearLogsBtn.onclick = function() {
     fetch("/api/logs", { method: "DELETE" })
@@ -63,6 +67,7 @@ function setupEventListeners() {
   };
 }
 
+// kick off page logic
 function init() {
   setupEventListeners();
   

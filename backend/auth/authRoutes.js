@@ -1,6 +1,6 @@
 const express = require("express");
 const crypto = require("crypto");
-const { getUserByOperatorId, getUserByEmail, createUser, updateUserPassword } = require("./db");
+const { getUserByOperatorId, getUserByEmail, createUser, updateUserPassword } = require("./authDb");
 
 const router = express.Router();
 
@@ -8,6 +8,7 @@ const sessions = new Map();
 const otpMap = new Map(); // Store OTPs temporarily
 const COOKIE_NAME = "flow_session";
 
+// helper to pull the session cookie out of the request
 function getSessionToken(req) {
   const cookieHeader = req.headers.cookie || "";
   for (const part of cookieHeader.split(";")) {
@@ -21,22 +22,26 @@ function getSessionToken(req) {
   return null;
 }
 
+// get the session info if the user is logged in
 function getSession(req) {
   const token = getSessionToken(req);
   return token ? sessions.get(token) || null : null;
 }
 
+// hash a password so we don't store it in plain text
 function hashPassword(password, salt = crypto.randomBytes(16).toString("hex")) {
   const hash = crypto.scryptSync(password, salt, 64).toString("hex");
   return { salt, hash };
 }
 
+// check if the password matches the hash we have
 function checkPassword(password, salt, storedHash) {
   const a = crypto.scryptSync(password, salt, 64);
   const b = Buffer.from(storedHash, "hex");
   return a.length === b.length && crypto.timingSafeEqual(a, b);
 }
 
+// block the request if the user isn't logged in (for API)
 function requireAuth(req, res, next) {
   const session = getSession(req);
   if (!session) {
@@ -47,6 +52,7 @@ function requireAuth(req, res, next) {
   next();
 }
 
+// redirect to login if session is missing (for pages)
 function requirePageAuth(req, res, next) {
   const session = getSession(req);
   if (!session) {
@@ -57,6 +63,7 @@ function requirePageAuth(req, res, next) {
   next();
 }
 
+// basic check for id/password format
 function validateCredentials(operatorId, password) {
   if (!/^\d+$/.test(operatorId || "")) return "Operator ID must contain digits only.";
   if ((password || "").length < 6) return "Password must be at least 6 characters.";
